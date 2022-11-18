@@ -11,6 +11,7 @@
 
 ## Функционал:
 
+
 -Редактирование аватара и профиля;
 -Добавление фотографии и лайков;
 -Удаление фотографии и лайков;
@@ -43,4 +44,4 @@ npm start
 React JS
 
 ### Ссылка на сайт:
-https://foxhoundm.github.io/mesto-react/
+https://foxhoundm.github.io/mesto-react-auth/
