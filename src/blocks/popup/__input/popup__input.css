@@ -1,0 +1,32 @@
+.popup__input {
+	width: 100%;
+	min-height: 27px;
+	display: block;
+	border: 0;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	font-size: 14px;
+	line-height: 17px;
+	font-weight: 400;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	padding-bottom: 5px;
+}
+
+.popup__input:focus {
+	outline: none;
+}
+
+.popup__input:last-of-type {
+	margin-top: 32px;
+}
+
+.popup__input:first-of-type {
+	margin-top: 32px;
+}
+
+@media screen and (max-width: 580px) {
+	.popup__input:first-of-type {
+		margin-top: 60px;
+	}
+}

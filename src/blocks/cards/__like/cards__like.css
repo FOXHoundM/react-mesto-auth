@@ -1,0 +1,21 @@
+.cards__like {
+   width: 22px;
+   height: 19px;
+   background-image: url('../../../images/buttons/heart.svg');
+   background-repeat: no-repeat;
+   border: none;
+   background-color: unset;
+   margin-bottom: 3px;
+}
+
+.cards__like:hover {
+   transition: 0.7s ease-in-out;
+   cursor: pointer;
+   opacity: 0.5;
+}
+
+
+
+
+
+

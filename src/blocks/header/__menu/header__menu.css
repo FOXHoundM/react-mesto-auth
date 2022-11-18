@@ -1,0 +1,15 @@
+.header__menu {
+	display: flex;
+	justify-content: space-between;
+	align-items: baseline;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 18px;
+	line-height: 22px;
+	max-height: 22px;
+}
+
+.header__menu :last-child {
+	margin-right: 0;
+	cursor: pointer;
+}

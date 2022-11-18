@@ -1,0 +1,8 @@
+.cards__like_active {
+	background-image: url('../../../../images/buttons/heart-fill.svg');
+	background-repeat: no-repeat;
+	background-position: center center;
+	color: #000000;
+	transition: 0.3s ease-in-out;
+	opacity: 1;
+}
