@@ -1,5 +1,4 @@
 import React, {useState} from 'react'
-import Header from "./Header";
 
 const Login = ({handleLogin}) => {
 
@@ -16,8 +15,6 @@ const Login = ({handleLogin}) => {
 	}
 
 	return (
-		<>
-			<Header link="/sign-up" headerText="Регистрация" />
 		<div className="authorization">
 			<h2 className="authorization__title">Вход</h2>
 
@@ -54,7 +51,6 @@ const Login = ({handleLogin}) => {
 			</form>
 
 		</div>
-		</>
 	)
 }
 

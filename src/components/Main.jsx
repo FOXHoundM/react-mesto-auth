@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from './Card';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import Header from "./Header";
 
 const Main = ({
 								cards,
@@ -11,22 +10,11 @@ const Main = ({
 								onAddPlace,
 								onEditAvatar,
 								onEditProfile,
-								loggedIn,
-								userData,
-								logout
 							}) => {
 
 	const currentUser = React.useContext(CurrentUserContext);
 
 	return (
-		<>
-		<Header
-			headerText={"Выйти"}
-			loggedIn={loggedIn}
-			login={userData.email}
-			onClick={logout}
-			link="/sign-in"
-		/>
 		<main className="content">
 			<section className="profile">
 				<div
@@ -69,8 +57,7 @@ const Main = ({
 				</ul>
 			</section>
 		</main>
-
-	</>);
+);
 };
 
 export default Main;

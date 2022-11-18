@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {Link} from 'react-router-dom';
-import Header from "./Header";
 
 const Register = ({handleRegister}) => {
 
@@ -17,8 +16,6 @@ const [regData, setRegData] = useState({email: '', password: ''})
 	}
 
 	return (
-		<>
-			<Header link="/sign-in" headerText={"Войти"}/>
 			<div className="authorization">
 				<h2 className="authorization__title">Регистрация</h2>
 
@@ -62,7 +59,6 @@ const [regData, setRegData] = useState({email: '', password: ''})
 					</Link>
 				</form>
 			</div>
-		</>
 	);
 };
 

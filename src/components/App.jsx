@@ -14,6 +14,7 @@ import Login from './Login';
 import ProtectedRoute from "./ProtectedRoute";
 import InfoToolTip from "./InfoToolTip";
 import {authorize, checkToken, register} from "../utils/AuthApi";
+import Header from "./Header";
 
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -46,7 +47,7 @@ const App = () => {
 
 	}, [loggedIn]);
 
-	const cbTokenCheck = useCallback(async () => {
+	const checkTokenCallback = useCallback(async () => {
 		if (localStorage.getItem('jwt')) {
 			const jwt = localStorage.getItem('jwt');
 			if (!jwt) {
@@ -65,13 +66,13 @@ const App = () => {
 	}, [localStorage.getItem('jwt')]);
 
 	useEffect(() => {
-		cbTokenCheck()
+		checkTokenCallback()
 			.catch((err) => {
 				console.log(`Ошибка: ${err}`);
 			});
-	}, [cbTokenCheck]);
+	}, [checkTokenCallback]);
 
-	const cbLogin = useCallback(async (regData) => {
+	const loginCallback = useCallback(async (regData) => {
 		try {
 			const data = await authorize(regData);
 			if (data.token) {
@@ -89,7 +90,7 @@ const App = () => {
 		}
 	}, []);
 
-	const cbRegister = useCallback(async (regData) => {
+	const registerCallback = useCallback(async (regData) => {
 		try {
 			const res = await register(regData);
 			if (res) {
@@ -107,7 +108,7 @@ const App = () => {
 		}
 	}, [])
 
-	const userLogout = useCallback(() => {
+	const handleLogout = useCallback(() => {
 		setLoggedIn(false);
 		localStorage.removeItem('jwt');
 	}, [])
@@ -198,6 +199,10 @@ const App = () => {
 
 	return (<CurrentUserContext.Provider value={currentUser}>
 		<div className="App">
+			 <Header
+				login={userData.email}
+				link="/sign-in"
+			/>
 			<Switch>
 				<ProtectedRoute
 					exact
@@ -205,7 +210,7 @@ const App = () => {
 					cards={cards}
 					loggedIn={loggedIn}
 					userData={userData}
-					logout={userLogout}
+					logout={handleLogout}
 					component={Main}
 					onEditProfile={handleEditProfileClick}
 					onAddPlace={handleAddPlaceClick}
@@ -216,11 +221,11 @@ const App = () => {
 				/>
 
 				<Route path="/sign-in">
-					<Login handleLogin={cbLogin}/>
+					<Login handleLogin={loginCallback}/>
 				</Route>
 
 				<Route path="/sign-up">
-					<Register handleRegister={cbRegister}/>
+					<Register handleRegister={registerCallback}/>
 				</Route>
 
 				<Route>
