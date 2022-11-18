@@ -99,9 +99,12 @@ const App = () => {
 				setIsAuth(true)
 				setIsToolTipOpen(true)
 				history.push('/sign-in');
+			} else {
+				setIsAuth(false)
+				setIsToolTipOpen(true)
 			}
 		} catch (err) {
-			setIsToolTipOpen(true)
+
 			console.log(`Ошибка: ${err}`);
 		}
 	}, [])
