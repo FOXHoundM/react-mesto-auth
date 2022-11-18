@@ -2,8 +2,7 @@ import React from 'react';
 import successImg from '../images/success.svg'
 import errorImg from '../images/error.svg'
 
-const InfoToolTip = ({name, isOpen, onClose, isSuccess, successReg, failedReg }) => {
-
+const InfoToolTip = ({name, isOpen, onClose, isSuccess, successReg, failedReg}) => {
 
 	return (
 		<div className={`popup popup_${name} ${isOpen ? 'popup_opened' : ''}`}>

@@ -15,7 +15,6 @@ import ProtectedRoute from "./ProtectedRoute";
 import InfoToolTip from "./InfoToolTip";
 import {authorize, checkToken, register} from "../utils/AuthApi";
 
-
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
 	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
@@ -34,7 +33,7 @@ const App = () => {
 	const [isAuth, setIsAuth] = useState(false)
 
 	useEffect(() => {
-		if (loggedIn){
+		if (loggedIn) {
 			Promise.all([api.getUserInfo(), api.getInitialCards()])
 				.then(([user, cards]) => {
 					setCurrentUser(user);
@@ -93,7 +92,7 @@ const App = () => {
 	const cbRegister = useCallback(async (regData) => {
 		try {
 			const res = await register(regData);
-			if(res) {
+			if (res) {
 				setUserData(res.data);
 				setLoggedIn(true);
 				setIsAuth(true)
@@ -104,7 +103,6 @@ const App = () => {
 				setIsToolTipOpen(true)
 			}
 		} catch (err) {
-
 			console.log(`Ошибка: ${err}`);
 		}
 	}, [])
@@ -198,72 +196,71 @@ const App = () => {
 		}
 	};
 
-	return (
-		<CurrentUserContext.Provider value={currentUser}>
-			<div className="App">
-				<Switch>
-					<ProtectedRoute
-						exact
-						path='/'
-						cards={cards}
-						loggedIn={loggedIn}
-						userData={userData}
-						logout={userLogout}
-						component={Main}
-						onEditProfile={handleEditProfileClick}
-						onAddPlace={handleAddPlaceClick}
-						onEditAvatar={handleEditAvatarClick}
-						onCardClick={handleCardClick}
-						onCardDelete={handleCardDelete}
-						onCardLike={handleCardLike}
-					/>
-
-					<Route path="/sign-in">
-						<Login handleLogin={cbLogin}/>
-					</Route>
-
-					<Route path="/sign-up">
-						<Register handleRegister={cbRegister} />
-					</Route>
-
-					<Route>
-						{loggedIn ? <Redirect exact to="/"/> : <Redirect to="/sign-in"/>}
-					</Route>
-				</Switch>
-
-				<Footer/>
-
-				<PopupAddPlace
-					isOpen={isAddPlacePopupOpen}
-					onClose={closeAllPopups}
-					onAddPlace={handleAddPlaceSubmit}
-				/>
-				<PopupEditProfile
-					isOpen={isEditProfilePopupOpen}
-					onClose={closeAllPopups}
-					onUpdateUser={handleUpdateUser}
-				/>
-				<PopupEditAvatar
-					isOpen={isEditAvatarPopupOpen}
-					onClose={closeAllPopups}
-					onUpdateAvatar={handleUpdateAvatar}
-				/>
-				<ImagePopup card={selectedCard} onClose={closeAllPopups}/>
-
-				<PopupDeleteConfirm
-					isOpen={isConfirmPopupOpen}
-					onClose={closeAllPopups}
+	return (<CurrentUserContext.Provider value={currentUser}>
+		<div className="App">
+			<Switch>
+				<ProtectedRoute
+					exact
+					path='/'
+					cards={cards}
+					loggedIn={loggedIn}
+					userData={userData}
+					logout={userLogout}
+					component={Main}
+					onEditProfile={handleEditProfileClick}
+					onAddPlace={handleAddPlaceClick}
+					onEditAvatar={handleEditAvatarClick}
+					onCardClick={handleCardClick}
+					onCardDelete={handleCardDelete}
+					onCardLike={handleCardLike}
 				/>
 
-				<InfoToolTip
-					successReg="Вы успешно зарегистрировались!"
-					failedReg="Что-то пошло не так! Попробуйте ещё раз."
-					isOpen={isToolTipOpen}
-					onClose={closeAllPopups}
-					isSuccess={isAuth}
-				/>
-			</div>
-		</CurrentUserContext.Provider>);
+				<Route path="/sign-in">
+					<Login handleLogin={cbLogin}/>
+				</Route>
+
+				<Route path="/sign-up">
+					<Register handleRegister={cbRegister}/>
+				</Route>
+
+				<Route>
+					{loggedIn ? <Redirect exact to="/"/> : <Redirect to="/sign-in"/>}
+				</Route>
+			</Switch>
+
+			<Footer/>
+
+			<PopupAddPlace
+				isOpen={isAddPlacePopupOpen}
+				onClose={closeAllPopups}
+				onAddPlace={handleAddPlaceSubmit}
+			/>
+			<PopupEditProfile
+				isOpen={isEditProfilePopupOpen}
+				onClose={closeAllPopups}
+				onUpdateUser={handleUpdateUser}
+			/>
+			<PopupEditAvatar
+				isOpen={isEditAvatarPopupOpen}
+				onClose={closeAllPopups}
+				onUpdateAvatar={handleUpdateAvatar}
+			/>
+			<ImagePopup card={selectedCard} onClose={closeAllPopups}/>
+
+			<PopupDeleteConfirm
+				isOpen={isConfirmPopupOpen}
+				onClose={closeAllPopups}
+			/>
+
+			<InfoToolTip
+				successReg="Вы успешно зарегистрировались!"
+				failedReg="Что-то пошло не так! Попробуйте ещё раз."
+				isOpen={isToolTipOpen}
+				onClose={closeAllPopups}
+				isSuccess={isAuth}
+			/>
+		</div>
+	</CurrentUserContext.Provider>);
 }
 
 export default App;
