@@ -1,0 +1,16 @@
+.authorization__subtitle {
+	text-align: center;
+	font-style: normal;
+	font-weight: 400;
+	font-size: 14px;
+	line-height: 17px;
+	cursor: pointer;
+	margin-top: 15px;
+	transition: opacity 0.5s ease;
+	text-decoration: none;
+	color: white;
+}
+
+.authorization__subtitle:hover {
+	opacity: 0.6;
+}
