@@ -66,7 +66,7 @@ const Main = ({
 			<Header
 				headerText={'Выйти'}
 				loggedIn={loggedIn}
-				login={userData.email}
+				login={userData}
 				onClick={logout}
 				link='/sign-in'
 			/>

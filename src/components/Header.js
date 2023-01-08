@@ -3,9 +3,6 @@ import logo from '../images/logo/logo-mesto.svg';
 import {Link} from "react-router-dom";
 
 
-
-
-
 const Header = ({link, login, loggedIn, onClick, headerText}) => {
 
 	return (
@@ -13,7 +10,6 @@ const Header = ({link, login, loggedIn, onClick, headerText}) => {
 		<header className="header">
 
 			<img className="header__logo" src={logo} alt="логотип"/>
-
 
 
 			<div className="header__menu">
@@ -37,9 +33,7 @@ const Header = ({link, login, loggedIn, onClick, headerText}) => {
 };
 
 
-
 export default Header;
-
 
 
 // import logo from '../images/logo/logo-mesto.svg';

@@ -14,7 +14,7 @@ import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoToolTip from './InfoToolTip';
 import { authorize, checkToken, register } from '../utils/AuthApi';
-import Header from "./Header";
+// import Header from "./Header";
 
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -218,7 +218,8 @@ const App = () => {
 						path="/"
 						cards={cards}
 						loggedIn={loggedIn}
-						// userData={userData}
+						logout={handleLogout}
+						userData={userData}
 						component={Main}
 						onEditProfile={handleEditProfileClick}
 						onAddPlace={handleAddPlaceClick}
