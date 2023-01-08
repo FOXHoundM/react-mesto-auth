@@ -14,7 +14,7 @@ import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoToolTip from './InfoToolTip';
 import { authorize, checkToken, register } from '../utils/AuthApi';
-import Header from './Header';
+import Header from "./Header";
 
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -211,15 +211,14 @@ const App = () => {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<div className="App">
-				<Header login={userData} link="/sign-in" />
+				{/*<Header login={userData} logout={handleLogout}/>*/}
 				<Switch>
 					<ProtectedRoute
 						exact
 						path="/"
 						cards={cards}
 						loggedIn={loggedIn}
-						userData={userData}
-						logout={handleLogout}
+						// userData={userData}
 						component={Main}
 						onEditProfile={handleEditProfileClick}
 						onAddPlace={handleAddPlaceClick}
@@ -238,11 +237,11 @@ const App = () => {
 					</Route>
 
 					<Route>
-						{loggedIn ? (
+						{loggedIn ?
 							<Redirect exact to="/" />
-						) : (
+						:
 							<Redirect to="/sign-in" />
-						)}
+						}
 					</Route>
 				</Switch>
 
