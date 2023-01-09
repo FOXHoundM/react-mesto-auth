@@ -69,7 +69,7 @@ const App = () => {
 		checkTokenCallback().catch((err) => {
 			console.log(`Ошибка: ${err}`);
 		});
-	}, []);
+	}, [checkTokenCallback]);
 
 	const loginCallback = useCallback(
 		async (regData) => {
@@ -89,7 +89,7 @@ const App = () => {
 				console.log(`Ошибка: ${err}`);
 			}
 		},
-		[]
+		[history]
 	);
 
 	const registerCallback = useCallback(
@@ -110,7 +110,7 @@ const App = () => {
 				console.log(`Ошибка: ${err}`);
 			}
 		},
-		[]
+		[history]
 	);
 
 	const handleLogout = useCallback(() => {
