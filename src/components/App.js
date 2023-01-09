@@ -4,16 +4,17 @@ import ImagePopup from './ImagePopup';
 import PopupAddPlace from './PopupAddPlace';
 import PopupEditProfile from './PopupEditProfile';
 import PopupEditAvatar from './PopupEditAvatar';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import PopupDeleteConfirm from './PopupDeleteConfirm';
-import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import {CurrentUserContext} from '../contexts/CurrentUserContext';
 import api from '../utils/Api';
-import { Route, Switch, useHistory, Redirect } from 'react-router-dom';
+import {Route, Switch, useHistory, Redirect} from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
 import ProtectedRoute from './ProtectedRoute';
 import InfoToolTip from './InfoToolTip';
-import { authorize, checkToken, register } from '../utils/AuthApi';
+import {authorize, checkToken, register} from '../utils/AuthApi';
+import Header from "./Header";
 // import Header from "./Header";
 
 const App = () => {
@@ -21,7 +22,7 @@ const App = () => {
 	const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
 	const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
 	const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
-	const [selectedCard, setSelectedCard] = useState({ state: false, src: '' });
+	const [selectedCard, setSelectedCard] = useState({state: false, src: ''});
 	const [cards, setCards] = useState([]);
 	const [currentUser, setCurrentUser] = useState({});
 
@@ -30,7 +31,7 @@ const App = () => {
 	const history = useHistory();
 
 	const [loggedIn, setLoggedIn] = useState(false);
-	const [userData, setUserData] = useState({});
+	const [userData, setUserData] = useState(null);
 	const [isAuth, setIsAuth] = useState(false);
 
 	useEffect(() => {
@@ -127,7 +128,7 @@ const App = () => {
 			setIsEditAvatarPopupOpen(true);
 		},
 		handleCardClick = (props) => {
-			setSelectedCard({ state: true, src: props.link, name: props.name });
+			setSelectedCard({state: true, src: props.link, name: props.name});
 		};
 
 	const closeAllPopups = () => {
@@ -135,7 +136,7 @@ const App = () => {
 		setIsAddPlacePopupOpen(false);
 		setIsEditAvatarPopupOpen(false);
 		setIsConfirmPopupOpen(false);
-		setSelectedCard({ state: false, src: '' });
+		setSelectedCard({state: false, src: ''});
 		setIsToolTipOpen(false);
 	};
 
@@ -211,7 +212,7 @@ const App = () => {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<div className="App">
-				{/*<Header login={userData} logout={handleLogout}/>*/}
+				<Header login={userData} />
 				<Switch>
 					<ProtectedRoute
 						exact
@@ -219,7 +220,7 @@ const App = () => {
 						cards={cards}
 						loggedIn={loggedIn}
 						logout={handleLogout}
-						userData={userData}
+						// userData={userData?.email}
 						component={Main}
 						onEditProfile={handleEditProfileClick}
 						onAddPlace={handleAddPlaceClick}
@@ -230,23 +231,24 @@ const App = () => {
 					/>
 
 					<Route path="/sign-in">
-						<Login handleLogin={loginCallback} />
+						<Login handleLogin={loginCallback}/>
 					</Route>
 
 					<Route path="/sign-up">
-						<Register handleRegister={registerCallback} />
+						<Register handleRegister={registerCallback}/>
 					</Route>
 
-					<Route>
-						{loggedIn ?
-							<Redirect exact to="/" />
-						:
-							<Redirect to="/sign-in" />
-						}
-					</Route>
 				</Switch>
 
-				<Footer />
+				<Route>
+					{loggedIn ?
+						<Redirect exact to="/"/>
+						:
+						<Redirect to="/sign-in"/>
+					}
+				</Route>
+
+				<Footer/>
 
 				<PopupAddPlace
 					isOpen={isAddPlacePopupOpen}
@@ -263,7 +265,7 @@ const App = () => {
 					onClose={closeAllPopups}
 					onUpdateAvatar={handleUpdateAvatar}
 				/>
-				<ImagePopup card={selectedCard} onClose={closeAllPopups} />
+				<ImagePopup card={selectedCard} onClose={closeAllPopups}/>
 
 				<PopupDeleteConfirm
 					isOpen={isConfirmPopupOpen}
