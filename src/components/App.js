@@ -31,7 +31,7 @@ const App = () => {
 	const history = useHistory();
 
 	const [loggedIn, setLoggedIn] = useState(false);
-	const [userData, setUserData] = useState(null);
+	const [userData, setUserData] = useState({});
 	const [isAuth, setIsAuth] = useState(false);
 
 	useEffect(() => {
@@ -69,7 +69,7 @@ const App = () => {
 		checkTokenCallback().catch((err) => {
 			console.log(`Ошибка: ${err}`);
 		});
-	}, [checkTokenCallback]);
+	}, []);
 
 	const loginCallback = useCallback(
 		async (regData) => {
@@ -89,7 +89,7 @@ const App = () => {
 				console.log(`Ошибка: ${err}`);
 			}
 		},
-		[history]
+		[]
 	);
 
 	const registerCallback = useCallback(
@@ -110,7 +110,7 @@ const App = () => {
 				console.log(`Ошибка: ${err}`);
 			}
 		},
-		[history]
+		[]
 	);
 
 	const handleLogout = useCallback(() => {
@@ -242,7 +242,7 @@ const App = () => {
 
 				<Route>
 					{loggedIn ?
-						<Redirect exact to="/"/>
+						<Redirect exact to="/" />
 						:
 						<Redirect to="/sign-in"/>
 					}
