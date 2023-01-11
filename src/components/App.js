@@ -7,7 +7,7 @@ import PopupEditAvatar from './PopupEditAvatar';
 import React, {useCallback, useEffect, useState} from 'react';
 import PopupDeleteConfirm from './PopupDeleteConfirm';
 import {CurrentUserContext} from '../contexts/CurrentUserContext';
-import api from '../utils/Api';
+// import api from '../utils/Api';
 import {Route, Switch, useHistory, Redirect} from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
@@ -15,6 +15,7 @@ import ProtectedRoute from './ProtectedRoute';
 import InfoToolTip from './InfoToolTip';
 import {authorize, checkToken, register} from '../utils/AuthApi';
 import Header from "./Header";
+import Api from "../utils/Api";
 
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -23,74 +24,25 @@ const App = () => {
 	const [isConfirmPopupOpen, setIsConfirmPopupOpen] = useState(false);
 	const [selectedCard, setSelectedCard] = useState({state: false, src: ''});
 	const [cards, setCards] = useState([]);
+	const [card, setCard] = useState({});
 	const [currentUser, setCurrentUser] = useState({});
+	const [jsonWebToken, setJsonWebToken] = useState('');
 
 	const [isToolTipOpen, setIsToolTipOpen] = useState(false);
-
-	const history = useHistory();
 
 	const [loggedIn, setLoggedIn] = useState(false);
 	const [userData, setUserData] = useState({});
 	const [isAuth, setIsAuth] = useState(false);
+	const history = useHistory();
 
-	useEffect(() => {
-		if (loggedIn) {
-			Promise.all([api.getUserInfo(), api.getInitialCards()])
-				.then(([user, cards]) => {
-					setCurrentUser(user);
-					setCards(cards);
-				})
-				.catch((err) => {
-					console.log(`Ошибка: ${err}`);
-				});
-		}
-	}, [loggedIn]);
-
-	const checkTokenCallback = useCallback(async () => {
-		if (localStorage.getItem('jwt')) {
-			const jwt = localStorage.getItem('jwt');
-			if (!jwt) {
-				throw new Error('No token in storage');
-			}
-
-			const resUser = await checkToken(jwt);
-			if (!resUser) {
-				throw new Error('Invalid user');
-			}
-			if (resUser.data) {
-				setUserData(resUser.data);
-				setLoggedIn(true);
-			}
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [localStorage.getItem('jwt')]);
-
-	useEffect(() => {
-		checkTokenCallback().catch((err) => {
-			console.log(`Ошибка: ${err}`);
-		});
-	}, [checkTokenCallback]);
-
-	const loginCallback = useCallback(
-		async (regData) => {
-			try {
-				const data = await authorize(regData);
-				if (data.token) {
-					localStorage.setItem('jwt', data.token);
-					setLoggedIn(true);
-					setUserData(regData.email);
-					setIsAuth(true);
-					setIsToolTipOpen(true);
-					history.push('/');
-				}
-			} catch (err) {
-				setIsAuth(false);
-				setIsToolTipOpen(true);
-				console.log(`Ошибка: ${err}`);
-			}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	const api = new Api({
+		url: 'https://api.foxhound.nomoredomains.club',
+		headers: {
+			'Authorization': `Bearer ${jsonWebToken}`,
+			'Content-type': 'application/json',
 		},
-		[history]
-	);
+	});
 
 	const registerCallback = useCallback(
 		async (regData) => {
@@ -98,7 +50,7 @@ const App = () => {
 				const res = await register(regData);
 				if (res) {
 					setUserData(res.data);
-					setLoggedIn(true);
+					// setLoggedIn(true);
 					setIsAuth(true);
 					setIsToolTipOpen(true);
 					history.push('/sign-in');
@@ -112,6 +64,72 @@ const App = () => {
 		},
 		[history]
 	);
+
+	const loginCallback = useCallback(
+		async (regData) => {
+			try {
+				const data = await authorize(regData);
+				if (data.token) {
+					localStorage.setItem('jwt', data.token);
+
+					console.log(data)
+
+					setJsonWebToken(data.token)
+					setLoggedIn(true);
+					setUserData(regData);
+					setIsAuth(true);
+					setIsToolTipOpen(true);
+					history.push('/');
+				}
+			} catch (err) {
+				setIsAuth(false);
+				setIsToolTipOpen(true);
+				console.log(`Ошибка: ${err}`);
+			}
+		},
+		[history]
+	);
+
+	const checkTokenCallback = useCallback(async () => {
+		if (localStorage.getItem('jwt')) {
+			const jwt = localStorage.getItem('jwt');
+			if (!jwt) {
+				throw new Error('No token in storage');
+			}
+
+			const resUser = await checkToken(jwt);
+			if (!resUser) {
+				throw new Error('Invalid user');
+			}
+			if (resUser) {
+				setJsonWebToken(jwt);
+				setUserData(resUser);
+				setLoggedIn(true);
+			}
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		checkTokenCallback().catch((err) => {
+			console.log(`Ошибка: ${err}`);
+		});
+	}, [checkTokenCallback]);
+
+	useEffect(() => {
+		if (loggedIn) {
+			console.log(jsonWebToken)
+
+			Promise.all([api.getUserInfo(), api.getInitialCards()])
+				.then(([user, cards]) => {
+					setCurrentUser(user);
+					setCards(cards.reverse());
+				})
+				.catch((err) => {
+					console.log(`Ошибка: ${err}`);
+				});
+		}
+	}, [jsonWebToken, loggedIn]);
 
 	const handleLogout = useCallback(() => {
 		setLoggedIn(false);
@@ -129,6 +147,10 @@ const App = () => {
 		},
 		handleCardClick = (props) => {
 			setSelectedCard({state: true, src: props.link, name: props.name});
+		},
+		handleConfirmPopupOpen = (card) => {
+			setIsConfirmPopupOpen(true)
+			setCard(card)
 		};
 
 	const closeAllPopups = () => {
@@ -166,6 +188,7 @@ const App = () => {
 		api.deleteCard(card)
 			.then(() => {
 				setCards((cards) => cards.filter((item) => item._id !== card));
+				closeAllPopups();
 			})
 			.catch((err) => {
 				console.log(`Ошибка: ${err}`);
@@ -184,7 +207,8 @@ const App = () => {
 	};
 
 	const handleCardLike = (card) => {
-		const isLiked = card.likes.some((i) => i._id === currentUser._id);
+		console.log(card)
+		const isLiked = card.likes.some((i) => i === currentUser._id);
 
 		if (!isLiked) {
 			api.addLike(card._id)
@@ -212,41 +236,42 @@ const App = () => {
 	return (
 		<CurrentUserContext.Provider value={currentUser}>
 			<div className="App">
-				<Header login={userData} />
+				<Header login={userData} link="/sign-in" loggedIn={loggedIn} logout={handleLogout} />
 				<Switch>
 					<ProtectedRoute
 						exact
 						path="/"
+						component={Main}
 						cards={cards}
 						loggedIn={loggedIn}
 						logout={handleLogout}
-						// userData={userData?.email}
-						component={Main}
+						userData={userData}
+
 						onEditProfile={handleEditProfileClick}
 						onAddPlace={handleAddPlaceClick}
 						onEditAvatar={handleEditAvatarClick}
 						onCardClick={handleCardClick}
-						onCardDelete={handleCardDelete}
+						onCardDelete={handleConfirmPopupOpen}
 						onCardLike={handleCardLike}
 					/>
 
 					<Route path="/sign-in">
-						<Login handleLogin={loginCallback}/>
+						<Login handleLogin={loginCallback} loggedIn={loggedIn} />
 					</Route>
 
 					<Route path="/sign-up">
 						<Register handleRegister={registerCallback}/>
 					</Route>
 
-				</Switch>
+					<Route>
+						{loggedIn ?
+							<Redirect exact to="/" />
+							:
+							<Redirect to="/sign-in"/>
+						}
+					</Route>
 
-				<Route>
-					{loggedIn ?
-						<Redirect exact to="/" />
-						:
-						<Redirect to="/sign-in"/>
-					}
-				</Route>
+				</Switch>
 
 				<Footer/>
 
@@ -270,6 +295,8 @@ const App = () => {
 				<PopupDeleteConfirm
 					isOpen={isConfirmPopupOpen}
 					onClose={closeAllPopups}
+					card={card}
+					onCardDelete={handleCardDelete}
 				/>
 
 				<InfoToolTip

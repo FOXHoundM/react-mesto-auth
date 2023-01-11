@@ -1,6 +1,7 @@
 import React, {useState} from 'react'
+import {Redirect} from "react-router-dom";
 
-const Login = ({handleLogin}) => {
+const Login = ({handleLogin, loggedIn}) => {
 
 	const [authData, setAuthData] = useState({email: '', password: ''})
 
@@ -12,6 +13,10 @@ const Login = ({handleLogin}) => {
 	const handleLoginSubmit = (evt) => {
 		evt.preventDefault()
 		handleLogin(authData)
+	}
+
+	if (loggedIn) {
+		return <Redirect to='/' />
 	}
 
 	return (

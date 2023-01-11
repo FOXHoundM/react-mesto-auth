@@ -1,6 +1,12 @@
 import PopupWithForm from './PopupWithForm';
 
-const PopupDeleteConfirm = ({ isOpen, onClose }) => {
+const PopupDeleteConfirm = ({ isOpen, onClose, card, onCardDelete }) => {
+
+	function handleSubmit(evt) {
+		evt.preventDefault();
+		onCardDelete(card)
+	}
+
 	return (
 		<div>
 			<PopupWithForm
@@ -10,6 +16,7 @@ const PopupDeleteConfirm = ({ isOpen, onClose }) => {
 				children={<></>}
 				isOpen={isOpen}
 				onClose={onClose}
+				onSubmit={handleSubmit}
 			/>
 		</div>
 	);

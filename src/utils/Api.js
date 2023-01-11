@@ -1,4 +1,4 @@
-class Api {
+export default class Api {
 	constructor(setting) {
 		this._url = setting.url;
 		this._headers = setting.headers;
@@ -14,6 +14,7 @@ class Api {
 	async getUserInfo() {
 		const res = await fetch(`${this._url}/users/me`, {
 			method: 'GET',
+			credentials: 'include',
 			headers: this._headers,
 		});
 		return this._getResponse(res);
@@ -22,6 +23,7 @@ class Api {
 	async editUserInfo(data) {
 		const res = await fetch(`${this._url}/users/me`, {
 			method: 'PATCH',
+			credentials: 'include',
 			headers: this._headers,
 			body: JSON.stringify({
 				name: data.name,
@@ -34,6 +36,7 @@ class Api {
 	async getInitialCards() {
 		const res = await fetch(`${this._url}/cards`, {
 			method: 'GET',
+			credentials: 'include',
 			headers: this._headers,
 		});
 		return this._getResponse(res);
@@ -42,6 +45,7 @@ class Api {
 	async addCard(item) {
 		const res = await fetch(`${this._url}/cards`, {
 			method: 'POST',
+			credentials: 'include',
 			headers: this._headers,
 			body: JSON.stringify({
 				name: item.name,
@@ -54,6 +58,7 @@ class Api {
 	async changeAvatar(data) {
 		const res = await fetch(`${this._url}/users/me/avatar`, {
 			method: 'PATCH',
+			credentials: 'include',
 			headers: this._headers,
 			body: JSON.stringify({
 				avatar: data.avatar,
@@ -65,6 +70,7 @@ class Api {
 	async deleteCard(cardId) {
 		const res = await fetch(`${this._url}/cards/${cardId}`, {
 			method: 'DELETE',
+			credentials: 'include',
 			headers: this._headers,
 		});
 		return this._getResponse(res);
@@ -73,6 +79,7 @@ class Api {
 	async addLike(cardId) {
 		const res = await fetch(`${this._url}/cards/${cardId}/likes`, {
 			method: 'PUT',
+			credentials: 'include',
 			headers: this._headers,
 		});
 		return this._getResponse(res);
@@ -81,18 +88,19 @@ class Api {
 	async deleteLike(cardId) {
 		const res = await fetch(`${this._url}/cards/${cardId}/likes`, {
 			method: 'DELETE',
+			credentials: 'include',
 			headers: this._headers,
 		});
 		return this._getResponse(res);
 	}
 }
 
-const api = new Api({
-	url: 'https://mesto.nomoreparties.co/v1/cohort-50',
-	headers: {
-		authorization: '1d5fb42f-083e-4754-bc11-0941caf4871f',
-		'Content-type': 'application/json',
-	},
-});
+// const api = new Api({
+// 	url: 'https://api.foxhound.nomoredomains.club',
+// 	headers: {
+// 		authorization: '1d5fb42f-083e-4754-bc11-0941caf4871f',
+// 		'Content-type': 'application/json',
+// 	},
+// });
 
-export default api;
+// export default api;

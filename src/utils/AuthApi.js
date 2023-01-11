@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.foxhound.nomoredomains.club';
 
 const request = (url, options) => {
 	return fetch(url, options).then(getRequestData())
@@ -30,6 +30,7 @@ export const register = ({email, password}) => {
 export const authorize = ({email, password}) => {
 	return request(`${BASE_URL}/signin`, {
 		method: 'POST',
+		credentials: 'include',
 		headers: {
 			"Content-Type": "application/json"
 		},
@@ -44,6 +45,7 @@ export const authorize = ({email, password}) => {
 export const checkToken = (JWT) => {
 	return request(`${BASE_URL}/users/me`, {
 		method: 'GET',
+		credentials: 'include',
 		headers: {
 			"Content-Type": "application/json",
 			"Authorization": `Bearer ${JWT}`

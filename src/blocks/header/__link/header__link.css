@@ -5,6 +5,7 @@
 	transition: 0.5s ease-in-out;
 	text-decoration: none;
 	margin-top: 0;
+	background: unset;
 }
 
 .header__link:hover:last-child {
