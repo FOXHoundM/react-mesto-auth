@@ -22,7 +22,7 @@ const Header = ({login, logout}) => {
 
 					<Route exact path="/">
 						<div className="header__menu">
-							<p className="header__link header__link_email">{login?.email}</p>
+							<p className="header__link header__link_email">{login.email}</p>
 							<Link to='/sign-in' onClick={logout} className="header__link">
 								Выйти
 							</Link>

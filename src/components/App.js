@@ -15,7 +15,6 @@ import ProtectedRoute from './ProtectedRoute';
 import InfoToolTip from './InfoToolTip';
 import {authorize, checkToken, register} from '../utils/AuthApi';
 import Header from "./Header";
-// import Header from "./Header";
 
 const App = () => {
 	const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -63,7 +62,8 @@ const App = () => {
 				setLoggedIn(true);
 			}
 		}
-	}, []);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [localStorage.getItem('jwt')]);
 
 	useEffect(() => {
 		checkTokenCallback().catch((err) => {
